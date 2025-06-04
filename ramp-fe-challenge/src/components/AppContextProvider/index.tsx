@@ -1,13 +1,26 @@
-import { useRef, useState } from "react"
-import { AppContext } from "../../utils/context"
-import { AppContextProviderComponent } from "./types"
+import { useRef, useState } from "react";
+import { AppContext } from "../../utils/context";
+import { AppContextProviderComponent } from "./types";
 
-export const AppContextProvider: AppContextProviderComponent = ({ children }) => {
-  const cache = useRef(new Map<string, string>())
-  const [error, setError] = useState<string>("")
+export const AppContextProvider: AppContextProviderComponent = ({
+  children,
+}) => {
+  const cache = useRef(new Map<string, string>());
+  const [error, setError] = useState<string>("");
+  // FIX BUG 7: Add transaction approvals state
+  const [transactionApprovals, setTransactionApprovals] = useState<
+    Map<string, boolean>
+  >(new Map());
 
   return (
-    <AppContext.Provider value={{ setError, cache }}>
+    <AppContext.Provider
+      value={{
+        setError,
+        cache,
+        transactionApprovals,
+        setTransactionApprovals,
+      }}
+    >
       {error ? (
         <div className="RampError">
           <h1 className="RampTextHeading--l">Oops. Application broken</h1>
@@ -18,5 +31,5 @@ export const AppContextProvider: AppContextProviderComponent = ({ children }) =>
         children
       )}
     </AppContext.Provider>
-  )
-}
+  );
+};
